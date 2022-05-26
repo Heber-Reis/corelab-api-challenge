@@ -8,7 +8,8 @@ const VehiclesSchema = new mongoose.Schema({
   year: { type: Number, maxlength: 4, required: true},
   licensePlate: { type: String, maxlength: 7},
   price: { type: Number, required: true},
-  isFavorite: { type: Boolean, required: true}
+  isFavorite: { type: Boolean, required: true},
+  user: { type: String, required: true}
 })
 
 export default mongoose.models.Vehicles || mongoose.model('Vehicles', VehiclesSchema)

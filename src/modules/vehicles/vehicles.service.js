@@ -25,7 +25,7 @@ export const UpdateVehicle = async (data) => {
 export const DeleteVehicle = async (data) => {
 
   try {
-    const DeletedVehicle = await Vehicles.findByIdAndDelete(data._id)
+    const DeletedVehicle = await Vehicles.findByIdAndDelete(data)
     return DeletedVehicle
   } catch (error) {
     throw error
@@ -46,23 +46,26 @@ export const GetAllVehicles = async () => {
 
 export const GetFilteredVehicles = async (data) => {
 
-  try {
+  try { 
+
     let VehiclesData = {}
     const Search = []
-    const filter = data.filters
-
+    const filter = JSON.parse(data.filters)
+    
+    
     //manipulando o objeto de filtro para deixar no formato aceito pelo mongoDB
     if(filter.price !== undefined) {
       filter.price['$gte'] = filter.price['minPrice']
       filter.price['$lte'] = filter.price['maxPrice']
       delete filter.price['minPrice']
       delete filter.price['maxPrice']
-    
+      
       Object.entries(filter.price).forEach(([key, value]) => {
-        if (value === undefined) delete filter.price[key]
+        if (value === undefined || value === "") delete filter.price[key]
       })
-  
-      (JSON.stringify(filter.price) === '{}') && delete filter['price']
+      
+      if(JSON.stringify(filter.price) === '{}') delete filter['price']
+      
     }
 
     Object.entries(filter).forEach(([key, value]) => {
@@ -70,14 +73,14 @@ export const GetFilteredVehicles = async (data) => {
         Search.push({ [key]: value })
       }
     })
-
+ 
     VehiclesData = Search.length > 0 ? await Vehicles.find({ $and: Search }) : await Vehicles.find()
 
     //filtrando pela palavra chave
     let DataVehicles = []
     DataVehicles = VehiclesData.filter(Element => 
       Object.entries(Element._doc).find(([key,value]) => {
-        if(value === data.keyword || data.keyword === undefined){
+        if( value.toString().toLowerCase().includes(data.keyword.toLowerCase()) || data.keyword === ""){
           return true
         }
       })

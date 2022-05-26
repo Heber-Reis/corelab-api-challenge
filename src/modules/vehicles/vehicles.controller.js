@@ -24,10 +24,10 @@ router.post('/update', async (req, res) => {
   }
 })
 
-router.delete('/delete', async (req, res) => {
+router.delete('/delete/:id?', async (req, res) => {
 
   try {
-    const Deleted = await DeleteVehicle(req.body)
+    const Deleted = await DeleteVehicle(req.params.id)
     res.status(200).send(Deleted)
   } catch (error) {
     if(error.message === 'Vehicle_not_found') res.status(404).send(error.message)
@@ -47,7 +47,7 @@ router.get('/get_all', async (req, res) => {
 
 router.get('/get_filtered', async (req, res) => {
   try {
-    const Data = await GetFilteredVehicles(req.body)
+    const Data = await GetFilteredVehicles(req.query)
     res.status(200).send(Data)
   } catch (error) {
     if(error.message === 'no_vehicle_found') res.status(404).send(error.message)
