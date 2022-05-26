@@ -10,3 +10,7 @@ A pasta modules está dividida em 3 arquivos sendo um de controller onde estão 
 
 Contém o arquivo com o middleware do mongoose, responsável por criar a conexão com o banco de dados
 A URI do banco de dados está salvo como variável de ambiente
+
+# video explicativo
+
+https://www.youtube.com/watch?v=GzHuvT4oupg&ab_channel=HeberMagno
